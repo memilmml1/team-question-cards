@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>서울파 변지팀 여름 워크숍 — 함께, 묻다</title>
+<title>서울파 변지팀 여름 워크숍 — 질문 카드 타임</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -169,8 +169,11 @@
   .rcard.used .check{ opacity:1; }
   .rcard .brand{
     position:absolute; bottom:12px;
-    font-size: 9px; font-weight:700; letter-spacing: .28em;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 8.5px; font-weight:700; letter-spacing: .1em;
     color: rgba(21,35,33,0.55);
+    white-space: nowrap;
   }
 
   .hint{
@@ -285,8 +288,8 @@
 <body>
 
   <div class="brandmark">TOGETHER WE ASK</div>
-  <h1>서울파 변지팀 여름 워크숍<br>함께, 묻다</h1>
-  <p class="sub">카드가 계속 흘러가고 있어요. 마음에 드는 카드를 톡, 터치해보세요.</p>
+  <h1>서울파 변지팀 여름 워크숍<br>질문 카드 타임</h1>
+  <p class="sub">카드가 계속 흘러가고 있어요.<br>마음에 드는 카드를 톡, 터치해보세요.</p>
 
   <div class="tabs" id="tabs">
     <button class="tab active" data-cat="일상"><span class="dot"></span>일상</button>
@@ -315,8 +318,6 @@
       <button class="modal-btn" id="modalClose">닫고 계속 돌리기</button>
     </div>
   </div>
-
-  <footer>일상 15 · 감정 13 · 업무 11 · 총 39장</footer>
 
 <script>
 const QUESTIONS = [
@@ -367,7 +368,16 @@ const CAT_COLORS = {
   '업무': {a:'#8FC1A6', b:'#5C9A7C', tag:'#457A62', glyph:'업'},
 };
 
-const SECONDS_PER_CARD = 3.2;
+const SECONDS_PER_CARD = 2.5;
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 let currentCat = '일상';
 let usedByCat = { '일상': new Set(), '감정': new Set(), '업무': new Set() };
@@ -392,7 +402,7 @@ function buildCard(item){
       <span class="cat-tag">${item.type}</span>
       <span class="check">✓</span>
       <span class="glyph">${colors.glyph}</span>
-      <span class="brand">함께,묻다</span>
+      <span class="brand">질문 카드 타임</span>
     </div>
   `;
   el.addEventListener('click', () => onPick(item));
@@ -400,7 +410,7 @@ function buildCard(item){
 }
 
 function render(){
-  const items = pool(currentCat);
+  const items = shuffle(pool(currentCat));
   trackEl.innerHTML = '';
   [...items, ...items].forEach(item => trackEl.appendChild(buildCard(item)));
 
